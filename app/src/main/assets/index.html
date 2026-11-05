@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML to APK Studio PRO</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #090d18;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 22px;
+    background: #111a2c;
+    border-bottom: 1px solid #26344e;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+header p {
+    color: #91a4c4;
+    margin-bottom: 0;
+}
+
+main {
+    padding: 16px;
+    max-width: 850px;
+    margin: auto;
+}
+
+.card {
+    background: #131d30;
+    border: 1px solid #293955;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 0;
+    color: #80aaff;
+}
+
+label {
+    display: block;
+    margin: 14px 0 7px;
+    color: #c7d5ed;
+    font-size: 14px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1px solid #344968;
+    background: #0b1425;
+    color: white;
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 190px;
+    resize: vertical;
+    font-family: monospace;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 11px;
+    background: #397cff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+button.secondary {
+    background: #263956;
+}
+
+button:active {
+    opacity: .8;
+}
+
+.option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #293955;
+}
+
+.option input {
+    width: 20px;
+    height: 20px;
+}
+
+.status {
+    color: #9eb2d2;
+    font-size: 13px;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+.badge {
+    display: inline-block;
+    background: #173c72;
+    color: #a9caff;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚡ HTML to APK Studio PRO</h1>
+    <p>Конструктор Android-приложений</p>
+    <span class="badge">PRO EDITION</span>
+</header>
+
+<main>
+
+<div class="card">
+    <h2>📱 Информация о приложении</h2>
+
+    <label>Название приложения</label>
+    <input id="appName" value="My Application">
+
+    <label>Package ID</label>
+    <input id="packageId" value="com.example.myapplication">
+
+    <label>Версия приложения</label>
+    <input id="version" value="1.0">
+
+    <label>Версия Android</label>
+    <select id="androidVersion">
+        <option value="23">Android 6.0+</option>
+        <option value="26">Android 8.0+</option>
+        <option value="29">Android 10.0+</option>
+        <option value="31">Android 12.0+</option>
+        <option value="35">Android 15.0+</option>
+    </select>
+</div>
+
+<div class="card">
+    <h2>🌐 HTML-код приложения</h2>
+
+    <label>Вставь свой HTML</label>
+    <textarea id="htmlCode" placeholder="<!DOCTYPE html>
+<html>
+<head>
+<title>Моё приложение</title>
+</head>
+<body>
+<h1>Привет!</h1>
+</body>
+</html>"></textarea>
+
+    <button class="secondary" onclick="previewHTML()">
+        👁 Предпросмотр HTML
+    </button>
+
+    <button class="secondary" onclick="saveProject()">
+        💾 Сохранить настройки проекта
+    </button>
+</div>
+
+<div class="card">
+    <h2>🔐 Разрешения Android</h2>
+
+    <div id="permissions"></div>
+</div>
+
+<div class="card">
+    <h2>⚙️ Настройки WebView</h2>
+
+    <div id="webSettings"></div>
+</div>
+
+<div class="card">
+    <h2>🎨 Дизайн приложения</h2>
+
+    <label>Цвет темы</label>
+    <input type="color" id="themeColor" value="#397cff">
+
+    <label>Ориентация экрана</label>
+    <select id="orientation">
+        <option value="unspecified">Автоматическая</option>
+        <option value="portrait">Портретная</option>
+        <option value="landscape">Альбомная</option>
+    </select>
+
+    <label>Масштаб интерфейса</label>
+    <select id="scale">
+        <option value="1">Обычный</option>
+        <option value="1.1">110%</option>
+        <option value="1.2">120%</option>
+    </select>
+</div>
+
+<div class="card">
+    <h2>📦 Сборка приложения</h2>
+
+    <p class="status">
+        Настрой приложение и сохрани проект.
+        После подключения облачной сборки здесь появится
+        возможность получить устанавливаемый APK.
+    </p>
+
+    <button onclick="saveProject()">
+        💾 Сохранить проект
+    </button>
+
+    <button class="secondary" onclick="downloadConfig()">
+        📄 Скачать конфигурацию проекта
+    </button>
+
+    <div class="status" id="status">
+        Статус: ожидание настройки.
+    </div>
+</div>
+
+</main>
+
+<script>
+
+const permissionList = [
+"INTERNET",
+"CAMERA",
+"RECORD_AUDIO",
+"ACCESS_FINE_LOCATION",
+"ACCESS_COARSE_LOCATION",
+"ACCESS_NETWORK_STATE",
+"ACCESS_WIFI_STATE",
+"VIBRATE",
+"POST_NOTIFICATIONS",
+"READ_MEDIA_IMAGES",
+"READ_MEDIA_VIDEO",
+"READ_MEDIA_AUDIO",
+"BLUETOOTH_CONNECT",
+"BLUETOOTH_SCAN",
+"BLUETOOTH_ADVERTISE",
+"NFC",
+"ACCESS_BACKGROUND_LOCATION",
+"FOREGROUND_SERVICE",
+"FOREGROUND_SERVICE_DATA_SYNC",
+"READ_CONTACTS",
+"WRITE_CONTACTS",
+"READ_CALENDAR",
+"WRITE_CALENDAR",
+"SET_WALLPAPER",
+"WAKE_LOCK",
+"USE_BIOMETRIC"
+];
+
+const webList = [
+["JavaScript","javascript"],
+["DOM Storage","domStorage"],
+["Масштабирование","zoom"],
+["Поддержка широкого экрана","wideScreen"],
+["Кэширование","cache"],
+["Загрузка файлов","fileUpload"],
+["Поддержка видео","video"],
+["Поддержка геолокации","geolocation"],
+["Поддержка cookies","cookies"],
+["Автоматическое воспроизведение","autoplay"],
+["Поддержка нескольких окон","multiWindow"],
+["Сохранение состояния","saveState"],
+["Полноэкранный режим","fullscreen"],
+["Поддержка свайпов","gestures"]
+];
+
+const permissions = document.getElementById("permissions");
+
+permissionList.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "option";
+
+    const label = document.createElement("span");
+    label.textContent = item;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.dataset.permission = item;
+    checkbox.checked = item === "INTERNET";
+
+    row.append(label, checkbox);
+    permissions.appendChild(row);
+});
+
+const webSettings = document.getElementById("webSettings");
+
+webList.forEach(([name, id]) => {
+    const row = document.createElement("div");
+    row.className = "option";
+
+    const label = document.createElement("span");
+    label.textContent = name;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.dataset.setting = id;
+    checkbox.checked = ["javascript","domStorage","wideScreen","video","cookies"].includes(id);
+
+    row.append(label, checkbox);
+    webSettings.appendChild(row);
+});
+
+function collectConfig() {
+    const config = {
+        appName: document.getElementById("appName").value,
+        packageId: document.getElementById("packageId").value,
+        version: document.getElementById("version").value,
+        androidVersion: document.getElementById("androidVersion").value,
+        html: document.getElementById("htmlCode").value,
+        themeColor: document.getElementById("themeColor").value,
+        orientation: document.getElementById("orientation").value,
+        scale: document.getElementById("scale").value,
+        permissions: [...document.querySelectorAll("[data-permission]:checked")]
+            .map(x => x.dataset.permission),
+        webSettings: [...document.querySelectorAll("[data-setting]:checked")]
+            .map(x => x.dataset.setting)
+    };
+
+    return config;
+}
+
+function saveProject() {
+    const config = collectConfig();
+
+    localStorage.setItem("htmlApkProject", JSON.stringify(config));
+
+    document.getElementById("status").textContent =
+        "Настройки сохранены на этом устройстве.";
+}
+
+function downloadConfig() {
+    const data = JSON.stringify(collectConfig(), null, 2);
+    const blob = new Blob([data], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "app-config.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function previewHTML() {
+    const html = document.getElementById("htmlCode").value;
+
+    if (!html.trim()) {
+        alert("Сначала вставь HTML-код.");
+        return;
+    }
+
+    const win = window.open("about:blank");
+
+    if (!win) {
+        alert("Предпросмотр заблокирован.");
+        return;
+    }
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+}
+
+const saved = localStorage.getItem("htmlApkProject");
+
+if (saved) {
+    try {
+        const config = JSON.parse(saved);
+
+        document.getElementById("appName").value = config.appName || "";
+        document.getElementById("packageId").value = config.packageId || "";
+        document.getElementById("version").value = config.version || "1.0";
+        document.getElementById("htmlCode").value = config.html || "";
+        document.getElementById("themeColor").value = config.themeColor || "#397cff";
+    } catch(e) {}
+}
+
+</script>
+
+</body>
+</html>
