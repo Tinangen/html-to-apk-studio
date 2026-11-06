@@ -7,639 +7,340 @@
 
 <style>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    background: #090d18;
-    color: white;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 18px;
+  background: #0b1020;
+  color: #f5f7ff;
+  font-family: Arial, sans-serif;
 }
 
-header {
-    padding: 22px;
-    background: #111a2c;
-    border-bottom: 1px solid #26344e;
+.container {
+  max-width: 650px;
+  margin: auto;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 22px;
+h1 {
+  font-size: 27px;
+  margin-bottom: 5px;
 }
 
-header p {
-    color: #91a4c4;
-}
-
-main {
-    padding: 16px;
-    max-width: 850px;
-    margin: auto;
+.subtitle {
+  color: #9da9c5;
+  margin-bottom: 25px;
 }
 
 .card {
-    background: #131d30;
-    border: 1px solid #293955;
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 16px;
-}
-
-h2 {
-    font-size: 18px;
-    color: #80aaff;
-    margin-top: 0;
+  background: #151d32;
+  border: 1px solid #273451;
+  border-radius: 17px;
+  padding: 18px;
+  margin-bottom: 17px;
 }
 
 label {
-    display: block;
-    margin: 14px 0 7px;
-    color: #c7d5ed;
-    font-size: 14px;
+  display: block;
+  margin: 15px 0 7px;
+  font-size: 14px;
+  color: #bdc9e4;
 }
 
-input, textarea, select {
-    width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    border: 1px solid #344968;
-    background: #0b1425;
-    color: white;
-    font-size: 14px;
-}
-
-input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-}
-
-input[type="color"] {
-    height: 48px;
+input, textarea {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #354361;
+  background: #0c1427;
+  color: white;
+  font-size: 15px;
+  outline: none;
 }
 
 textarea {
-    min-height: 190px;
-    resize: vertical;
-    font-family: monospace;
+  min-height: 180px;
+  resize: vertical;
+  font-family: monospace;
 }
 
 button {
-    width: 100%;
-    padding: 15px;
-    border: 0;
-    border-radius: 11px;
-    background: #397cff;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 12px;
+  width: 100%;
+  padding: 15px;
+  margin-top: 13px;
+  border: 0;
+  border-radius: 11px;
+  background: #637cff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-button.secondary {
-    background: #263956;
+button:disabled {
+  opacity: .5;
 }
 
-button.danger {
-    background: #873c4c;
+.secondary {
+  background: #273653;
 }
 
-.option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid #293955;
+#status {
+  margin-top: 15px;
+  padding: 13px;
+  border-radius: 10px;
+  background: #0c1427;
+  color: #bdc9e4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
-.status {
-    color: #9eb2d2;
-    font-size: 13px;
-    margin-top: 12px;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+small {
+  color: #9da9c5;
+  line-height: 1.5;
 }
 
-.badge {
-    display: inline-block;
-    background: #173c72;
-    color: #a9caff;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-}
-
-#previewFrame {
-    width: 100%;
-    height: 450px;
-    border: 1px solid #344968;
-    border-radius: 10px;
-    background: white;
-    display: none;
-}
-
-.file-box {
-    border: 1px dashed #5278b5;
-    border-radius: 12px;
-    padding: 14px;
-    background: #0b1425;
-}
-
-.small {
-    color: #91a4c4;
-    font-size: 12px;
+iframe {
+  width: 100%;
+  height: 300px;
+  background: white;
+  border: 0;
+  border-radius: 10px;
+  margin-top: 12px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>⚡ HTML to APK Studio PRO</h1>
-    <p>Конструктор Android-приложений</p>
-    <span class="badge">PRO EDITION</span>
-</header>
+<div class="container">
 
-<main>
+<h1>HTML to APK Studio PRO</h1>
+<div class="subtitle">Превращай HTML-сайты в Android-приложения.</div>
 
 <div class="card">
-    <h2>📱 Информация о приложении</h2>
 
-    <label>Название приложения</label>
-    <input id="appName" value="My Application">
+<h3>📱 Настройки приложения</h3>
 
-    <label>Package ID</label>
-    <input id="packageId" value="com.example.myapplication">
+<label>Название приложения</label>
+<input id="appName" value="My HTML App" maxlength="40">
 
-    <label>Версия приложения</label>
-    <input id="version" value="1.0">
+<label>Package ID</label>
+<input id="packageId" value="com.example.myhtmlapp">
 
-    <label>Минимальная версия Android</label>
-    <select id="androidVersion">
-        <option value="23">Android 6.0+</option>
-        <option value="26">Android 8.0+</option>
-        <option value="29">Android 10.0+</option>
-        <option value="31">Android 12.0+</option>
-        <option value="35">Android 15.0+</option>
-    </select>
 </div>
 
 <div class="card">
-    <h2>🌐 HTML-код приложения</h2>
 
-    <div class="file-box">
-        <label>📂 Загрузить HTML-файл</label>
+<h3>📄 HTML-файл</h3>
 
-        <input
-            type="file"
-            id="htmlFile"
-            accept=".html,.htm,text/html"
-        >
+<label>Выбери HTML на устройстве</label>
+<input id="htmlFile" type="file" accept=".html,.htm,text/html">
 
-        <div class="status" id="fileStatus">
-            Файл ещё не выбран.
-        </div>
+<div id="fileStatus">Файл пока не выбран.</div>
 
-        <button class="danger" onclick="clearHtmlFile()">
-            Удалить загруженный файл
-        </button>
-    </div>
+<label>Или вставь HTML-код</label>
+<textarea id="htmlCode" placeholder="Вставь сюда HTML-код..."></textarea>
 
-    <p class="small">
-        Большие HTML-проекты лучше загружать файлом,
-        а не вставлять тысячи строк вручную.
-    </p>
+<button class="secondary" onclick="previewHTML()">
+Предпросмотр
+</button>
 
-    <label>Или вставить HTML вручную</label>
+<iframe id="preview" sandbox="allow-scripts allow-forms"></iframe>
 
-    <textarea
-        id="htmlCode"
-        placeholder="Вставь небольшой HTML-код..."
-    ></textarea>
-
-    <button class="secondary" onclick="previewHTML()">
-        👁 Предпросмотр HTML
-    </button>
-
-    <iframe
-        id="previewFrame"
-        sandbox="allow-scripts allow-forms"
-        title="HTML Preview"
-    ></iframe>
-
-    <button class="secondary" onclick="saveProject()">
-        💾 Сохранить настройки
-    </button>
 </div>
 
 <div class="card">
-    <h2>🔐 Разрешения Android</h2>
-    <div id="permissions"></div>
+
+<h3>🔐 Подключение сборщика</h3>
+
+<label>Ключ доступа Worker</label>
+<input
+  id="uploadKey"
+  type="password"
+  autocomplete="off"
+  placeholder="Введи свой UPLOAD_KEY"
+>
+
+<small>
+Ключ используется только для отправки запроса.
+Он не сохраняется в приложении.
+Никому его не передавай.
+</small>
+
 </div>
 
 <div class="card">
-    <h2>⚙️ Настройки WebView</h2>
-    <div id="webSettings"></div>
+
+<h3>🚀 Сборка APK</h3>
+
+<button id="buildButton" onclick="buildAPK()">
+Собрать APK
+</button>
+
+<div id="status">Ожидание сборки...</div>
+
 </div>
 
-<div class="card">
-    <h2>🎨 Дизайн приложения</h2>
-
-    <label>Цвет темы</label>
-    <input type="color" id="themeColor" value="#397cff">
-
-    <label>Ориентация экрана</label>
-    <select id="orientation">
-        <option value="unspecified">Автоматическая</option>
-        <option value="portrait">Портретная</option>
-        <option value="landscape">Альбомная</option>
-    </select>
-
-    <label>Масштаб интерфейса</label>
-    <select id="scale">
-        <option value="1">Обычный</option>
-        <option value="1.1">110%</option>
-        <option value="1.2">120%</option>
-    </select>
 </div>
-
-<div class="card">
-    <h2>📦 Сборка приложения</h2>
-
-    <p class="status">
-        Настрой приложение, загрузи HTML и сохрани проект.
-        Облачная сборка APK будет подключена отдельно.
-    </p>
-
-    <button onclick="saveProject()">
-        💾 Сохранить проект
-    </button>
-
-    <button class="secondary" onclick="downloadConfig()">
-        📄 Скачать конфигурацию проекта
-    </button>
-
-    <div class="status" id="status">
-        Статус: ожидание настройки.
-    </div>
-</div>
-
-</main>
 
 <script>
 
-let loadedHtml = "";
-let loadedFileName = "";
+const WORKER_URL =
+"https://html-to-apk-builder.tyyyym67.workers.dev/";
 
-const permissionList = [
-    "INTERNET",
-    "CAMERA",
-    "RECORD_AUDIO",
-    "ACCESS_FINE_LOCATION",
-    "ACCESS_COARSE_LOCATION",
-    "ACCESS_NETWORK_STATE",
-    "ACCESS_WIFI_STATE",
-    "VIBRATE",
-    "POST_NOTIFICATIONS",
-    "READ_MEDIA_IMAGES",
-    "READ_MEDIA_VIDEO",
-    "READ_MEDIA_AUDIO",
-    "BLUETOOTH_CONNECT",
-    "BLUETOOTH_SCAN",
-    "BLUETOOTH_ADVERTISE",
-    "NFC",
-    "ACCESS_BACKGROUND_LOCATION",
-    "FOREGROUND_SERVICE",
-    "FOREGROUND_SERVICE_DATA_SYNC",
-    "READ_CONTACTS",
-    "WRITE_CONTACTS",
-    "READ_CALENDAR",
-    "WRITE_CALENDAR",
-    "SET_WALLPAPER",
-    "WAKE_LOCK",
-    "USE_BIOMETRIC"
-];
+let loadedHTML = "";
 
-const webList = [
-    ["JavaScript", "javascript"],
-    ["DOM Storage", "domStorage"],
-    ["Масштабирование", "zoom"],
-    ["Широкий экран", "wideScreen"],
-    ["Кэширование", "cache"],
-    ["Загрузка файлов", "fileUpload"],
-    ["Поддержка видео", "video"],
-    ["Геолокация", "geolocation"],
-    ["Cookies", "cookies"],
-    ["Автовоспроизведение", "autoplay"],
-    ["Несколько окон", "multiWindow"],
-    ["Сохранение состояния", "saveState"],
-    ["Полноэкранный режим", "fullscreen"],
-    ["Поддержка свайпов", "gestures"]
-];
+const htmlFile = document.getElementById("htmlFile");
 
-const permissionContainer =
-    document.getElementById("permissions");
+htmlFile.addEventListener("change", async function() {
 
-permissionList.forEach(item => {
-    const row = document.createElement("div");
-    row.className = "option";
+  const file = this.files[0];
 
-    const label = document.createElement("span");
-    label.textContent = item;
+  if (!file) return;
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.dataset.permission = item;
-    checkbox.checked = item === "INTERNET";
+  if (!file.name.toLowerCase().endsWith(".html") &&
+      !file.name.toLowerCase().endsWith(".htm")) {
+    alert("Выбери HTML-файл.");
+    return;
+  }
 
-    row.append(label, checkbox);
-    permissionContainer.appendChild(row);
-});
+  if (file.size > 500000) {
+    alert("Максимальный размер HTML — 500 КБ.");
+    return;
+  }
 
-const webContainer =
-    document.getElementById("webSettings");
+  document.getElementById("fileStatus").textContent =
+    "Загружаю файл...";
 
-webList.forEach(([name, id]) => {
-    const row = document.createElement("div");
-    row.className = "option";
-
-    const label = document.createElement("span");
-    label.textContent = name;
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.dataset.setting = id;
-
-    checkbox.checked = [
-        "javascript",
-        "domStorage",
-        "wideScreen",
-        "video",
-        "cookies"
-    ].includes(id);
-
-    row.append(label, checkbox);
-    webContainer.appendChild(row);
-});
-
-document.getElementById("htmlFile")
-.addEventListener("change", async function() {
-
-    const file = this.files[0];
-
-    if (!file) return;
-
-    const allowed = /\.(html|htm)$/i.test(file.name);
-
-    if (!allowed) {
-        alert("Выбери файл с расширением HTML или HTM.");
-        this.value = "";
-        return;
-    }
-
-    const maxSize = 50 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-        alert("Файл больше 50 МБ. Выбери файл меньшего размера.");
-        this.value = "";
-        return;
-    }
-
-    const status = document.getElementById("fileStatus");
-
-    status.textContent =
-        "⏳ Читаем файл " + file.name + "...";
-
-    try {
-        const content = await file.text();
-
-        loadedHtml = content;
-        loadedFileName = file.name;
-
-        document.getElementById("htmlCode").value = "";
-
-        status.textContent =
-            "✅ Загружен: " + file.name +
-            " | " + (file.size / 1024).toFixed(1) + " КБ";
-
-        document.getElementById("status").textContent =
-            "HTML-файл загружен в память приложения.";
-
-    } catch (error) {
-        loadedHtml = "";
-        loadedFileName = "";
-
-        status.textContent =
-            "❌ Не удалось прочитать файл.";
-
-    }
-
-});
-
-document.getElementById("htmlCode")
-.addEventListener("input", function() {
-
-    if (this.value.trim()) {
-        loadedHtml = "";
-        loadedFileName = "";
-
-        document.getElementById("fileStatus").textContent =
-            "Используется HTML из текстового поля.";
-    }
-
-});
-
-function clearHtmlFile() {
-
-    loadedHtml = "";
-    loadedFileName = "";
-
-    document.getElementById("htmlFile").value = "";
-    document.getElementById("htmlCode").value = "";
+  try {
+    loadedHTML = await file.text();
 
     document.getElementById("fileStatus").textContent =
-        "HTML-файл удалён.";
+      "Файл загружен: " + file.name;
 
-}
+    document.getElementById("htmlCode").value = "";
 
-function getHtml() {
+  } catch (error) {
+    document.getElementById("fileStatus").textContent =
+      "Не удалось прочитать файл.";
 
-    if (loadedHtml) {
-        return loadedHtml;
-    }
+  }
 
-    return document.getElementById("htmlCode").value;
+});
 
+function getHTML() {
+
+  const textarea = document.getElementById("htmlCode").value;
+
+  if (textarea.trim()) {
+    return textarea;
+  }
+
+  return loadedHTML;
 }
 
 function previewHTML() {
 
-    const html = getHtml();
+  const html = getHTML();
 
-    if (!html.trim()) {
-        alert("Сначала загрузи HTML-файл или вставь код.");
-        return;
+  if (!html.trim()) {
+    alert("Сначала выбери HTML-файл или вставь код.");
+    return;
+  }
+
+  document.getElementById("preview").srcdoc = html;
+
+}
+
+async function buildAPK() {
+
+  const button = document.getElementById("buildButton");
+  const status = document.getElementById("status");
+
+  const html = getHTML();
+
+  const appName =
+    document.getElementById("appName").value.trim();
+
+  const packageId =
+    document.getElementById("packageId").value.trim();
+
+  const uploadKey =
+    document.getElementById("uploadKey").value;
+
+  if (!html.trim()) {
+    alert("Сначала загрузи HTML.");
+    return;
+  }
+
+  if (!appName) {
+    alert("Введи название приложения.");
+    return;
+  }
+
+  if (!uploadKey) {
+    alert("Введи ключ доступа Worker.");
+    return;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$/.test(packageId)) {
+    alert("Неверный Package ID.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Отправка...";
+
+  status.textContent =
+    "Отправляем HTML в систему сборки...\nПожалуйста, подожди.";
+
+  try {
+
+    const response = await fetch(WORKER_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        "X-Upload-Key": uploadKey
+      },
+
+      body: JSON.stringify({
+        html: html,
+        appName: appName,
+        packageId: packageId
+      })
+
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.error || "Ошибка отправки"
+      );
     }
 
-    const frame = document.getElementById("previewFrame");
+    status.textContent =
+      "✅ HTML успешно отправлен!\n\n" +
+      "GitHub Actions получил команду на сборку.\n\n" +
+      "Открой GitHub → Actions, чтобы следить за процессом.\n\n" +
+      "После завершения скачай APK из раздела Artifacts.";
 
-    frame.style.display = "block";
-    frame.srcdoc = html;
+  } catch (error) {
 
-}
+    status.textContent =
+      "❌ Ошибка:\n" + error.message;
 
-function collectConfig() {
+  } finally {
 
-    return {
+    button.disabled = false;
+    button.textContent = "Собрать APK";
 
-        appName:
-            document.getElementById("appName").value,
-
-        packageId:
-            document.getElementById("packageId").value,
-
-        version:
-            document.getElementById("version").value,
-
-        androidVersion:
-            document.getElementById("androidVersion").value,
-
-        html:
-            getHtml(),
-
-        htmlFileName:
-            loadedFileName,
-
-        themeColor:
-            document.getElementById("themeColor").value,
-
-        orientation:
-            document.getElementById("orientation").value,
-
-        scale:
-            document.getElementById("scale").value,
-
-        permissions:
-            [...document.querySelectorAll(
-                "[data-permission]:checked"
-            )].map(x => x.dataset.permission),
-
-        webSettings:
-            [...document.querySelectorAll(
-                "[data-setting]:checked"
-            )].map(x => x.dataset.setting)
-
-    };
+  }
 
 }
-
-function saveProject() {
-
-    const config = collectConfig();
-
-    try {
-
-        const settings = {...config};
-        delete settings.html;
-
-        localStorage.setItem(
-            "htmlApkSettings",
-            JSON.stringify(settings)
-        );
-
-        document.getElementById("status").textContent =
-            "✅ Настройки сохранены. HTML хранится в памяти до закрытия приложения.";
-
-    } catch(error) {
-
-        document.getElementById("status").textContent =
-            "❌ Не удалось сохранить настройки.";
-
-    }
-
-}
-
-function downloadConfig() {
-
-    const config = collectConfig();
-
-    const blob = new Blob(
-        [JSON.stringify(config, null, 2)],
-        {type: "application/json"}
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-
-    a.href = url;
-    a.download = "app-config.json";
-
-    a.click();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-}
-
-function restoreSettings() {
-
-    try {
-
-        const saved = localStorage.getItem(
-            "htmlApkSettings"
-        );
-
-        if (!saved) return;
-
-        const config = JSON.parse(saved);
-
-        document.getElementById("appName").value =
-            config.appName || "My Application";
-
-        document.getElementById("packageId").value =
-            config.packageId || "com.example.myapplication";
-
-        document.getElementById("version").value =
-            config.version || "1.0";
-
-        document.getElementById("androidVersion").value =
-            config.androidVersion || "23";
-
-        document.getElementById("themeColor").value =
-            config.themeColor || "#397cff";
-
-        document.getElementById("orientation").value =
-            config.orientation || "unspecified";
-
-        document.getElementById("scale").value =
-            config.scale || "1";
-
-        document.querySelectorAll("[data-permission]")
-        .forEach(box => {
-            box.checked =
-                (config.permissions || []).includes(
-                    box.dataset.permission
-                );
-        });
-
-        document.querySelectorAll("[data-setting]")
-        .forEach(box => {
-            box.checked =
-                (config.webSettings || []).includes(
-                    box.dataset.setting
-                );
-        });
-
-    } catch(error) {
-
-        console.log("Не удалось восстановить настройки.");
-
-    }
-
-}
-
-restoreSettings();
 
 </script>
 
