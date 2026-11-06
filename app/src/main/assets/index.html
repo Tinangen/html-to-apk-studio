@@ -1,355 +1,52 @@
-<!DOCTYPE html><html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HTML to APK Studio PRO</title><style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 18px;
-  background: #0b1020;
-  color: #f5f7ff;
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  max-width: 650px;
-  margin: auto;
-}
-
-h1 {
-  font-size: 27px;
-  margin-bottom: 5px;
-}
-
-.subtitle {
-  color: #9da9c5;
-  margin-bottom: 25px;
-}
-
-.card {
-  background: #151d32;
-  border: 1px solid #273451;
-  border-radius: 17px;
-  padding: 18px;
-  margin-bottom: 17px;
-}
-
-label {
-  display: block;
-  margin: 15px 0 7px;
-  font-size: 14px;
-  color: #bdc9e4;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 13px;
-  border-radius: 10px;
-  border: 1px solid #354361;
-  background: #0c1427;
-  color: white;
-  font-size: 15px;
-  outline: none;
-}
-
-textarea {
-  min-height: 180px;
-  resize: vertical;
-  font-family: monospace;
-}
-
-button, .download-button {
-  display: block;
-  width: 100%;
-  padding: 15px;
-  margin-top: 13px;
-  border: 0;
-  border-radius: 11px;
-  background: #637cff;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-}
-
-button:disabled {
-  opacity: .5;
-}
-
-.secondary {
-  background: #273653;
-}
-
-.download-button {
-  background: #19a66a;
-}
-
-#downloadArea {
-  display: none;
-}
-
-#status {
-  margin-top: 15px;
-  padding: 13px;
-  border-radius: 10px;
-  background: #0c1427;
-  color: #bdc9e4;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-small {
-  color: #9da9c5;
-  line-height: 1.5;
-}
-
-iframe {
-  width: 100%;
-  height: 300px;
-  background: white;
-  border: 0;
-  border-radius: 10px;
-  margin-top: 12px;
-}
-</style></head><body>
-<div class="container"><h1>HTML to APK Studio PRO</h1>
-<div class="subtitle">Превращай HTML-сайты в Android-приложения.</div><div class="card">
-<h3>📱 Настройки приложения</h3><label>Название приложения</label>
-<input id="appName" value="My HTML App" maxlength="40">
-
-<label>Package ID</label>
-<input id="packageId" value="com.example.myhtmlapp">
-
-</div><div class="card">
-<h3>📄 HTML-файл</h3><label>Выбери HTML на устройстве</label>
-<input id="htmlFile" type="file" accept=".html,.htm,text/html">
-
-<div id="fileStatus">Файл пока не выбран.</div><label>Или вставь HTML-код</label>
-
-<textarea id="htmlCode" placeholder="Вставь сюда HTML-код..."></textarea><button class="secondary" onclick="previewHTML()">Предпросмотр</button>
-
-<iframe id="preview" sandbox="allow-scripts allow-forms"></iframe>
-</div><div class="card">
-<h3>🔐 Подключение сборщика</h3><label>Ключ доступа Worker</label>
-<input
-id="uploadKey"
-type="password"
-autocomplete="off"
-placeholder="Введи свой UPLOAD_KEY"
-
-«»
-
-<small>
-Ключ используется для отправки запроса.
-Не передавай его посторонним.
-</small>
-</div><div class="card">
-<h3>🚀 Сборка APK</h3><button id="buildButton" onclick="buildAPK()">Собрать APK</button>
-
-<div id="status">Ожидание сборки...</div><div id="downloadArea">
-  <a id="downloadButton" class="download-button" href="#" target="_blank">
-    ⬇ Скачать APK
-  </a>
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HTML to APK Studio PRO</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:18px;background:#0b1020;color:#f5f7ff;font-family:Arial,sans-serif}.container{max-width:650px;margin:auto}h1{font-size:27px;margin-bottom:5px}.subtitle,small,.hint{color:#9da9c5;line-height:1.5}.subtitle{margin-bottom:25px}.card{background:#151d32;border:1px solid #273451;border-radius:17px;padding:18px;margin-bottom:17px}label{display:block;margin:15px 0 7px;font-size:14px;color:#bdc9e4}input,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #354361;background:#0c1427;color:white;font-size:15px}textarea{min-height:180px;font-family:monospace}button,.download-button{display:block;width:100%;padding:15px;margin-top:13px;border:0;border-radius:11px;background:#637cff;color:white;font-size:16px;font-weight:bold;text-align:center;text-decoration:none}button:disabled{opacity:.5}.secondary{background:#273653}.download-button{background:#19a66a}#downloadArea{display:none}#status{margin-top:15px;padding:13px;border-radius:10px;background:#0c1427;color:#bdc9e4;white-space:pre-wrap;overflow-wrap:anywhere}iframe{width:100%;height:300px;background:white;border:0;border-radius:10px;margin-top:12px}.permission{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #273451}.permission strong{display:block;font-size:14px}.permission small{display:block;font-size:12px;margin-top:4px}.permission input{width:22px;height:22px;flex:0 0 22px;accent-color:#637cff}.section-title{margin-top:20px;color:#9eafff;font-size:14px}
+</style></head><body><div class="container">
+<h1>HTML to APK Studio PRO</h1><div class="subtitle">Превращай HTML-сайты в Android-приложения.</div>
+<div class="card"><h3>📱 Настройки приложения</h3><label>Название приложения</label><input id="appName" value="My HTML App" maxlength="40"><label>Package ID</label><input id="packageId" value="com.example.myhtmlapp"></div>
+<div class="card"><h3>📄 HTML-файл</h3><label>Выбери HTML на устройстве</label><input id="htmlFile" type="file" accept=".html,.htm,text/html"><div id="fileStatus" class="hint">Файл пока не выбран.</div><label>Или вставь HTML-код</label><textarea id="htmlCode" placeholder="Вставь сюда HTML-код..."></textarea><button class="secondary" onclick="previewHTML()">Предпросмотр</button><iframe id="preview" sandbox="allow-scripts allow-forms"></iframe></div>
+<div class="card"><h3>🔐 Обычные разрешения Android</h3><p class="hint">Выбери разрешения, которые нужно добавить в APK. Для опасных разрешений Android также потребует согласие пользователя во время работы приложения.</p>
+<div class="section-title">🌐 Сеть</div>
+<div class="permission"><div><strong>Доступ к интернету</strong><small>INTERNET · Android 1.0+</small></div><input type="checkbox" id="internet" checked></div>
+<div class="permission"><div><strong>Состояние сети</strong><small>ACCESS_NETWORK_STATE</small></div><input type="checkbox" id="network" checked></div>
+<div class="permission"><div><strong>Незащищённый HTTP</strong><small>Разрешить HTTP-трафик</small></div><input type="checkbox" id="cleartext"></div>
+<div class="section-title">📍 Геолокация</div>
+<div class="permission"><div><strong>Приблизительная</strong><small>ACCESS_COARSE_LOCATION</small></div><input type="checkbox" id="coarse"></div>
+<div class="permission"><div><strong>Точная</strong><small>ACCESS_FINE_LOCATION</small></div><input type="checkbox" id="fine"></div>
+<div class="permission"><div><strong>Геолокация в фоне</strong><small>ACCESS_BACKGROUND_LOCATION · Android 10+</small></div><input type="checkbox" id="backgroundLocation"></div>
+<div class="section-title">🔔 Уведомления</div>
+<div class="permission"><div><strong>Обычные уведомления</strong><small>Создание уведомлений · Android 1.0+</small></div><input type="checkbox" id="notifications" checked></div>
+<div class="permission"><div><strong>Системное разрешение на уведомления</strong><small>POST_NOTIFICATIONS · Android 13+ (API 33)</small></div><input type="checkbox" id="postNotifications" checked></div>
+<div class="section-title">🎙 Камера и звук</div>
+<div class="permission"><div><strong>Камера</strong><small>CAMERA</small></div><input type="checkbox" id="camera"></div>
+<div class="permission"><div><strong>Микрофон</strong><small>RECORD_AUDIO</small></div><input type="checkbox" id="microphone"></div>
+<div class="section-title">📁 Файлы и данные</div>
+<div class="permission"><div><strong>Фото и видео</strong><small>READ_MEDIA_IMAGES / READ_MEDIA_VIDEO · Android 13+</small></div><input type="checkbox" id="media"></div>
+<div class="permission"><div><strong>Аудиофайлы</strong><small>READ_MEDIA_AUDIO · Android 13+</small></div><input type="checkbox" id="audioFiles"></div>
+<div class="permission"><div><strong>Контакты</strong><small>READ_CONTACTS / WRITE_CONTACTS</small></div><input type="checkbox" id="contacts"></div>
+<div class="permission"><div><strong>Календарь</strong><small>READ_CALENDAR / WRITE_CALENDAR</small></div><input type="checkbox" id="calendar"></div>
+<div class="section-title">⚙️ Другие</div>
+<div class="permission"><div><strong>Вибрация</strong><small>VIBRATE</small></div><input type="checkbox" id="vibrate"></div>
+<div class="permission"><div><strong>Bluetooth</strong><small>BLUETOOTH_SCAN / CONNECT · Android 12+</small></div><input type="checkbox" id="bluetooth"></div>
+<div class="permission"><div><strong>NFC</strong><small>NFC</small></div><input type="checkbox" id="nfc"></div>
+<div class="permission"><div><strong>Физическая активность</strong><small>ACTIVITY_RECOGNITION · Android 10+</small></div><input type="checkbox" id="activity"></div></div>
+<div class="card"><h3>♿ Специальные возможности</h3><p class="hint">Настройки доступности интерфейса. Они не включают системную службу специальных возможностей автоматически.</p>
+<div class="permission"><div><strong>Совместимость с TalkBack</strong><small>Поддержка экранного диктора</small></div><input type="checkbox" id="talkback" checked></div>
+<div class="permission"><div><strong>Крупный текст</strong><small>Увеличение текста интерфейса</small></div><input type="checkbox" id="largeText"></div>
+<div class="permission"><div><strong>Высокая контрастность</strong><small>Улучшенная читаемость</small></div><input type="checkbox" id="contrast"></div>
+<div class="permission"><div><strong>Крупные элементы управления</strong><small>Увеличенные кнопки и зоны нажатия</small></div><input type="checkbox" id="largeControls"></div>
+<div class="permission"><div><strong>Управление клавиатурой</strong><small>Навигация с физической клавиатуры</small></div><input type="checkbox" id="keyboard" checked></div></div>
+<div class="card"><h3>🔐 Подключение сборщика</h3><label>Ключ доступа Worker</label><input id="uploadKey" type="password" autocomplete="off" placeholder="Введи свой UPLOAD_KEY"><small>Не передавай ключ посторонним.</small></div>
+<div class="card"><h3>🚀 Сборка APK</h3><button id="buildButton" onclick="buildAPK()">Собрать APK</button><div id="status">Ожидание сборки...</div><div id="downloadArea"><a id="downloadButton" class="download-button">⬇ Скачать APK</a></div></div>
 </div>
-</div></div><script>
-const WORKER_URL =
-"https://html-to-apk-builder.tyyyym67.workers.dev";
-
-let loadedHTML = "";
-let currentRequestId = null;
-let polling = false;
-
-const htmlFile = document.getElementById("htmlFile");
-
-htmlFile.addEventListener("change", async function() {
-  const file = this.files[0];
-
-  if (!file) return;
-
-  if (!file.name.toLowerCase().endsWith(".html") &&
-      !file.name.toLowerCase().endsWith(".htm")) {
-    alert("Выбери HTML-файл.");
-    return;
-  }
-
-  if (file.size > 500000) {
-    alert("Максимальный размер HTML — 500 КБ.");
-    return;
-  }
-
-  document.getElementById("fileStatus").textContent =
-    "Загружаю файл...";
-
-  try {
-    loadedHTML = await file.text();
-
-    document.getElementById("fileStatus").textContent =
-      "Файл загружен: " + file.name;
-
-    document.getElementById("htmlCode").value = "";
-  } catch (error) {
-    document.getElementById("fileStatus").textContent =
-      "Не удалось прочитать файл.";
-  }
-});
-
-function getHTML() {
-  const textarea = document.getElementById("htmlCode").value;
-  return textarea.trim() ? textarea : loadedHTML;
-}
-
-function previewHTML() {
-  const html = getHTML();
-
-  if (!html.trim()) {
-    alert("Сначала выбери HTML-файл или вставь код.");
-    return;
-  }
-
-  document.getElementById("preview").srcdoc = html;
-}
-
-async function buildAPK() {
-  const button = document.getElementById("buildButton");
-  const status = document.getElementById("status");
-
-  const html = getHTML();
-  const appName = document.getElementById("appName").value.trim();
-  const packageId = document.getElementById("packageId").value.trim();
-  const uploadKey = document.getElementById("uploadKey").value;
-
-  if (!html.trim()) {
-    alert("Сначала загрузи HTML.");
-    return;
-  }
-
-  if (!appName) {
-    alert("Введи название приложения.");
-    return;
-  }
-
-  if (!uploadKey) {
-    alert("Введи ключ доступа Worker.");
-    return;
-  }
-
-  if (!/^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$/.test(packageId)) {
-    alert("Неверный Package ID.");
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = "Отправка...";
-  document.getElementById("downloadArea").style.display = "none";
-
-  status.textContent =
-    "Отправляем HTML в систему сборки...\nПожалуйста, подожди.";
-
-  try {
-    const response = await fetch(WORKER_URL + "/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Upload-Key": uploadKey
-      },
-      body: JSON.stringify({
-        html: html,
-        appName: appName,
-        packageId: packageId
-      })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || "Ошибка отправки");
-    }
-
-    if (!result.requestId) {
-      throw new Error("Сервер не вернул ID сборки.");
-    }
-
-    currentRequestId = result.requestId;
-
-    status.textContent =
-      "✅ HTML отправлен!\n\n" +
-      "⏳ GitHub собирает APK.\n" +
-      "Обычно это занимает несколько минут.\n\n" +
-      "Не закрывай приложение до завершения проверки.";
-
-    startPolling(currentRequestId);
-
-  } catch (error) {
-    status.textContent = "❌ Ошибка:\n" + error.message;
-    button.disabled = false;
-    button.textContent = "Собрать APK";
-  }
-}
-
-async function startPolling(requestId) {
-  if (polling) return;
-
-  polling = true;
-
-  const status = document.getElementById("status");
-  const button = document.getElementById("buildButton");
-  const startedAt = Date.now();
-  const timeout = 15 * 60 * 1000;
-
-  try {
-    while (Date.now() - startedAt < timeout) {
-      await new Promise(resolve => setTimeout(resolve, 5000));
-
-      const response = await fetch(
-        WORKER_URL + "/status?id=" + encodeURIComponent(requestId),
-        { cache: "no-store" }
-      );
-
-      if (!response.ok) {
-        throw new Error("Не удалось проверить состояние сборки.");
-      }
-
-      const result = await response.json();
-
-      if (result.ready === true) {
-        const downloadURL =
-          WORKER_URL + "/download?id=" + encodeURIComponent(requestId);
-
-        document.getElementById("downloadButton").href = downloadURL;
-        document.getElementById("downloadArea").style.display = "block";
-
-        status.textContent =
-          "✅ APK успешно собран!\n\n" +
-          "Нажми кнопку «Скачать APK» ниже.";
-
-        button.disabled = false;
-        button.textContent = "Собрать ещё один APK";
-
-        return;
-      }
-
-      const elapsed = Math.floor((Date.now() - startedAt) / 1000);
-      status.textContent =
-        "⏳ APK ещё собирается...\n\n" +
-        "Прошло: " + elapsed + " сек.\n" +
-        "Проверяем каждые 5 секунд.";
-    }
-
-    status.textContent =
-      "⌛ Проверка заняла больше 15 минут.\n" +
-      "Сборка могла завершиться с ошибкой. Проверь GitHub Actions.";
-
-  } catch (error) {
-    status.textContent =
-      "❌ Ошибка проверки:\n" + error.message;
-  } finally {
-    polling = false;
-    button.disabled = false;
-    button.textContent = "Собрать APK";
-  }
-}
-</script></body>
-</html>
+<script>
+const WORKER_URL="https://html-to-apk-builder.tyyyym67.workers.dev";let loadedHTML="",polling=false;
+document.getElementById("htmlFile").addEventListener("change",async function(){const f=this.files[0];if(!f)return;if(!/\.html?$/i.test(f.name)){alert("Выбери HTML-файл.");return;}if(f.size>500000){alert("Максимальный размер HTML — 500 КБ.");return;}document.getElementById("fileStatus").textContent="Загружаю файл...";try{loadedHTML=await f.text();document.getElementById("fileStatus").textContent="Файл загружен: "+f.name;document.getElementById("htmlCode").value="";}catch(e){document.getElementById("fileStatus").textContent="Не удалось прочитать файл."; }});
+function getHTML(){const t=document.getElementById("htmlCode").value;return t.trim()?t:loadedHTML;}
+function previewHTML(){const h=getHTML();if(!h.trim()){alert("Сначала выбери HTML-файл или вставь код.");return;}document.getElementById("preview").srcdoc=h;}
+function isOn(id){return document.getElementById(id).checked;}
+function getSettings(){return {permissions:{internet:isOn("internet"),networkState:isOn("network"),cleartext:isOn("cleartext"),locationCoarse:isOn("coarse"),locationFine:isOn("fine"),locationBackground:isOn("backgroundLocation"),notifications:isOn("notifications"),postNotifications:isOn("postNotifications"),camera:isOn("camera"),microphone:isOn("microphone"),media:isOn("media"),audioFiles:isOn("audioFiles"),contacts:isOn("contacts"),calendar:isOn("calendar"),vibrate:isOn("vibrate"),bluetooth:isOn("bluetooth"),nfc:isOn("nfc"),activityRecognition:isOn("activity")},accessibility:{talkback:isOn("talkback"),largeText:isOn("largeText"),highContrast:isOn("contrast"),largeControls:isOn("largeControls"),keyboard:isOn("keyboard")}};}
+async function buildAPK(){const b=document.getElementById("buildButton"),s=document.getElementById("status"),html=getHTML(),appName=document.getElementById("appName").value.trim(),packageId=document.getElementById("packageId").value.trim(),key=document.getElementById("uploadKey").value;if(!html.trim())return alert("Сначала загрузи HTML.");if(!appName)return alert("Введи название приложения.");if(!key)return alert("Введи ключ доступа Worker.");if(!/^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$/.test(packageId))return alert("Неверный Package ID.");b.disabled=true;b.textContent="Отправка...";document.getElementById("downloadArea").style.display="none";s.textContent="Отправляем HTML и настройки разрешений...";try{const r=await fetch(WORKER_URL+"/build",{method:"POST",headers:{"Content-Type":"application/json","X-Upload-Key":key},body:JSON.stringify({html,appName,packageId,settings:getSettings()})});const data=await r.json();if(!r.ok)throw new Error(data.error||"Ошибка отправки");if(!data.requestId)throw new Error("Сервер не вернул ID сборки.");pollBuild(data.requestId);}catch(e){s.textContent="❌ Ошибка: "+e.message;b.disabled=false;b.textContent="Собрать APK";}}
+async function pollBuild(id){if(polling)return;polling=true;const s=document.getElementById("status"),b=document.getElementById("buildButton"),start=Date.now();try{while(Date.now()-start<900000){await new Promise(r=>setTimeout(r,5000));const r=await fetch(WORKER_URL+"/status?id="+encodeURIComponent(id),{cache:"no-store"});if(!r.ok)throw new Error("Не удалось проверить сборку.");const d=await r.json();if(d.ready){document.getElementById("downloadButton").href=WORKER_URL+"/download?id="+encodeURIComponent(id);document.getElementById("downloadArea").style.display="block";s.textContent="✅ APK готов! Нажми «Скачать APK».";return;}s.textContent="⏳ APK собирается... Прошло "+Math.floor((Date.now()-start)/1000)+" секунд."; }s.textContent="⌛ Сборка не подтвердилась за 15 минут. Проверь GitHub Actions."; }catch(e){s.textContent="❌ Ошибка проверки: "+e.message;}finally{polling=false;b.disabled=false;b.textContent="Собрать APK";}}
+</script></body></html>
