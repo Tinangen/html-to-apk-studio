@@ -8,12 +8,16 @@ on:
         required: true
         type: string
         default: "My HTML App"
-
       package_id:
         description: "Android package ID"
         required: true
         type: string
         default: "com.example.myhtmlapp"
+      request_id:
+        description: "Build request ID"
+        required: true
+        type: string
+        default: "manual-build"
 
 permissions:
   contents: read
@@ -65,35 +69,34 @@ jobs:
               raise SystemExit("Invalid package ID")
 
           assets = Path("app/src/main/assets")
-          assets.mkdir(parents=True, exist_ok=True)
-
-          source = assets / "user-app.html"
-          target = assets / "index.html"
-
-          target.write_bytes(source.read_bytes())
+          (assets / "index.html").write_bytes(
+              (assets / "user-app.html").read_bytes()
+          )
 
           gradle = Path("app/build.gradle")
           text = gradle.read_text()
-
           text = re.sub(
               r"applicationId\s+['\"][^'\"]+['\"]",
               "applicationId '" + package_id + "'",
               text,
               count=1
           )
-
           gradle.write_text(text)
 
           manifest = Path("app/src/main/AndroidManifest.xml")
           text = manifest.read_text()
-
+          safe_name = (
+              app_name.replace("&", "&amp;")
+              .replace("<", "&lt;")
+              .replace(">", "&gt;")
+              .replace('"', "")
+          )
           text = re.sub(
               r'android:label="[^"]*"',
-              'android:label="' + app_name.replace('"', '') + '"',
+              'android:label="' + safe_name + '"',
               text,
               count=1
           )
-
           manifest.write_text(text)
 
           print("Application prepared successfully")
@@ -102,7 +105,34 @@ jobs:
       - name: Build APK
         run: gradle assembleDebug
 
-      - name: Upload finished APK
+      - name: Check APK size
+        run: |
+          APK="app/build/outputs/apk/debug/app-debug.apk"
+          SIZE=$(stat -c%s "$APK")
+          echo "APK size: $SIZE bytes"
+          if [ "$SIZE" -gt 25165824 ]; then
+            echo "APK exceeds the 24 MB storage limit."
+            exit 1
+          fi
+
+      - name: Send APK to application storage
+        env:
+          WORKER_URL: https://html-to-apk-builder.tyyyym67.workers.dev
+          BUILD_UPLOAD_KEY: ${{ secrets.BUILD_UPLOAD_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+        run: |
+          if [ -z "$BUILD_UPLOAD_KEY" ]; then
+            echo "BUILD_UPLOAD_KEY secret is missing!"
+            exit 1
+          fi
+
+          curl --fail-with-body --silent --show-error \
+            -X POST \
+            -H "Authorization: Bearer $BUILD_UPLOAD_KEY" \
+            --data-binary @app/build/outputs/apk/debug/app-debug.apk \
+            "$WORKER_URL/upload-apk?id=$REQUEST_ID"
+
+      - name: Save backup artifact
         uses: actions/upload-artifact@v4
         with:
           name: User-APK
