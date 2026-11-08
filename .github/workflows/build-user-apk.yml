@@ -8,16 +8,19 @@ on:
         required: true
         type: string
         default: "My HTML App"
+
       package_id:
         description: "Android package ID"
         required: true
         type: string
         default: "com.example.myhtmlapp"
+
       request_id:
         description: "Build request ID"
         required: true
         type: string
         default: "manual-build"
+
       settings:
         description: "JSON settings from HTML builder"
         required: false
@@ -31,6 +34,7 @@ jobs:
   build:
     name: Build APK from HTML
     runs-on: ubuntu-latest
+
     steps:
       - name: Download repository
         uses: actions/checkout@v4
@@ -58,93 +62,245 @@ jobs:
           APP_NAME: ${{ inputs.app_name }}
           PACKAGE_ID: ${{ inputs.package_id }}
           SETTINGS_JSON: ${{ inputs.settings }}
+
         run: |
           python3 - <<'PY'
-          import json, os, re
+          import json
+          import os
+          import re
           import xml.etree.ElementTree as ET
           from pathlib import Path
 
           app_name = os.environ["APP_NAME"]
           package_id = os.environ["PACKAGE_ID"]
-          if not re.fullmatch(r"[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+", package_id):
+
+          if not re.fullmatch(
+              r"[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+",
+              package_id
+          ):
               raise SystemExit("Invalid package ID")
 
           try:
-              settings = json.loads(os.environ.get("SETTINGS_JSON") or "{}")
+              settings = json.loads(
+                  os.environ.get("SETTINGS_JSON") or "{}"
+              )
           except json.JSONDecodeError as exc:
               raise SystemExit(f"Invalid settings JSON: {exc}")
+
           p = settings.get("permissions", {})
+
           if not isinstance(p, dict):
               raise SystemExit("Invalid permissions settings")
 
           assets = Path("app/src/main/assets")
-          (assets / "index.html").write_bytes((assets / "user-app.html").read_bytes())
+          assets.mkdir(parents=True, exist_ok=True)
+
+          (assets / "index.html").write_bytes(
+              (assets / "user-app.html").read_bytes()
+          )
 
           gradle = Path("app/build.gradle")
+
           text = gradle.read_text()
-          text, count = re.subn(r"applicationId\s+['\"][^'\"]+['\"]",
-                                "applicationId '" + package_id + "'", text, count=1)
+
+          text, count = re.subn(
+              r"applicationId\s+['\"][^'\"]+['\"]",
+              "applicationId '" + package_id + "'",
+              text,
+              count=1
+          )
+
           if count != 1:
-              raise SystemExit("Could not find applicationId in app/build.gradle")
+              raise SystemExit(
+                  "Could not find applicationId in app/build.gradle"
+              )
+
           gradle.write_text(text)
 
-          ET.register_namespace("android", "http://schemas.android.com/apk/res/android")
+          ET.register_namespace(
+              "android",
+              "http://schemas.android.com/apk/res/android"
+          )
+
           a = "{http://schemas.android.com/apk/res/android}"
-          manifest_path = Path("app/src/main/AndroidManifest.xml")
+
+          manifest_path = Path(
+              "app/src/main/AndroidManifest.xml"
+          )
+
           tree = ET.parse(manifest_path)
           root = tree.getroot()
-          application = root.find("application")
-          if application is None:
-              raise SystemExit("AndroidManifest.xml has no <application> element")
 
-          label = (app_name.replace("&", "&amp;").replace("<", "&lt;")
-                   .replace(">", "&gt;").replace('"', ""))
-          application.set(a + "label", label)
+          application = root.find("application")
+
+          if application is None:
+              raise SystemExit(
+                  "AndroidManifest.xml has no application element"
+              )
+
+          application.set(a + "label", app_name)
 
           selected = set()
+
           def add(flag, *names):
               if p.get(flag) is True:
                   selected.update(names)
 
-          add("internet", "android.permission.INTERNET")
-          add("networkState", "android.permission.ACCESS_NETWORK_STATE")
-          add("locationCoarse", "android.permission.ACCESS_COARSE_LOCATION")
-          add("locationFine", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
-          add("locationBackground", "android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
-          add("postNotifications", "android.permission.POST_NOTIFICATIONS")
-          add("camera", "android.permission.CAMERA")
-          add("microphone", "android.permission.RECORD_AUDIO")
-          add("media", "android.permission.READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_VIDEO")
-          add("audioFiles", "android.permission.READ_MEDIA_AUDIO")
-          add("contacts", "android.permission.READ_CONTACTS", "android.permission.WRITE_CONTACTS")
-          add("calendar", "android.permission.READ_CALENDAR", "android.permission.WRITE_CALENDAR")
-          add("vibrate", "android.permission.VIBRATE")
-          add("bluetooth", "android.permission.BLUETOOTH", "android.permission.BLUETOOTH_ADMIN",
-              "android.permission.BLUETOOTH_SCAN", "android.permission.BLUETOOTH_CONNECT")
-          add("nfc", "android.permission.NFC")
-          add("activityRecognition", "android.permission.ACTIVITY_RECOGNITION")
+          add(
+              "internet",
+              "android.permission.INTERNET"
+          )
 
-          existing = {e.get(a + "name"): e for e in root.findall("uses-permission")}
+          add(
+              "networkState",
+              "android.permission.ACCESS_NETWORK_STATE"
+          )
+
+          add(
+              "locationCoarse",
+              "android.permission.ACCESS_COARSE_LOCATION"
+          )
+
+          add(
+              "locationFine",
+              "android.permission.ACCESS_COARSE_LOCATION",
+              "android.permission.ACCESS_FINE_LOCATION"
+          )
+
+          add(
+              "locationBackground",
+              "android.permission.ACCESS_BACKGROUND_LOCATION",
+              "android.permission.ACCESS_COARSE_LOCATION"
+          )
+
+          if (
+              p.get("notifications") is True
+              or p.get("postNotifications") is True
+          ):
+              selected.add(
+                  "android.permission.POST_NOTIFICATIONS"
+              )
+
+          add(
+              "camera",
+              "android.permission.CAMERA"
+          )
+
+          add(
+              "microphone",
+              "android.permission.RECORD_AUDIO"
+          )
+
+          add(
+              "media",
+              "android.permission.READ_MEDIA_IMAGES",
+              "android.permission.READ_MEDIA_VIDEO"
+          )
+
+          add(
+              "audioFiles",
+              "android.permission.READ_MEDIA_AUDIO"
+          )
+
+          add(
+              "contacts",
+              "android.permission.READ_CONTACTS",
+              "android.permission.WRITE_CONTACTS"
+          )
+
+          add(
+              "calendar",
+              "android.permission.READ_CALENDAR",
+              "android.permission.WRITE_CALENDAR"
+          )
+
+          add(
+              "vibrate",
+              "android.permission.VIBRATE"
+          )
+
+          add(
+              "bluetooth",
+              "android.permission.BLUETOOTH",
+              "android.permission.BLUETOOTH_ADMIN",
+              "android.permission.BLUETOOTH_SCAN",
+              "android.permission.BLUETOOTH_CONNECT"
+          )
+
+          add(
+              "nfc",
+              "android.permission.NFC"
+          )
+
+          add(
+              "activityRecognition",
+              "android.permission.ACTIVITY_RECOGNITION"
+          )
+
+          existing = {
+              element.get(a + "name"): element
+              for element in root.findall("uses-permission")
+          }
+
           for name in sorted(selected):
               element = existing.get(name)
+
               if element is None:
                   element = ET.Element("uses-permission")
                   element.set(a + "name", name)
-                  root.insert(list(root).index(application), element)
-              if name in ("android.permission.BLUETOOTH", "android.permission.BLUETOOTH_ADMIN"):
+
+                  root.insert(
+                      list(root).index(application),
+                      element
+                  )
+
+              if name in (
+                  "android.permission.BLUETOOTH",
+                  "android.permission.BLUETOOTH_ADMIN"
+              ):
                   element.set(a + "maxSdkVersion", "30")
 
           if p.get("cleartext") is True:
-              application.set(a + "usesCleartextTraffic", "true")
+              application.set(
+                  a + "usesCleartextTraffic",
+                  "true"
+              )
           else:
-              application.attrib.pop(a + "usesCleartextTraffic", None)
+              application.attrib.pop(
+                  a + "usesCleartextTraffic",
+                  None
+              )
 
-          tree.write(manifest_path, encoding="utf-8", xml_declaration=True)
-          print("Manifest updated. Permissions added:", *sorted(selected), sep="\n - ")
-          print("POST_NOTIFICATIONS is the Android 13+ runtime notification permission.")
-          print("The notifications toggle is a feature choice, not a separate Android permission.")
-          print("Accessibility UI preferences are not Android permissions or an Accessibility Service.")
+          tree.write(
+              manifest_path,
+              encoding="utf-8",
+              xml_declaration=True
+          )
+
+          print("Manifest updated.")
+          print("Permissions:")
+
+          for permission in sorted(selected):
+              print(" -", permission)
+
+          print("Application prepared successfully.")
           PY
+
+      - name: Install Android template
+        run: |
+          TEMPLATE="app-template/src/main/java/com/tinangen/htmltoapkstudio/MainActivity.kt"
+          TARGET="app/src/main/java/com/tinangen/htmltoapkstudio/MainActivity.kt"
+
+          if [ ! -f "$TEMPLATE" ]; then
+            echo "Android template not found!"
+            exit 1
+          fi
+
+          mkdir -p "$(dirname "$TARGET")"
+
+          cp "$TEMPLATE" "$TARGET"
+
+          echo "Android template installed successfully."
 
       - name: Build APK
         run: gradle assembleDebug
@@ -152,8 +308,11 @@ jobs:
       - name: Check APK size
         run: |
           APK="app/build/outputs/apk/debug/app-debug.apk"
+
           SIZE=$(stat -c%s "$APK")
+
           echo "APK size: $SIZE bytes"
+
           if [ "$SIZE" -gt 25165824 ]; then
             echo "APK exceeds the 24 MB storage limit."
             exit 1
@@ -164,11 +323,13 @@ jobs:
           WORKER_URL: https://html-to-apk-builder.tyyyym67.workers.dev
           BUILD_UPLOAD_KEY: ${{ secrets.BUILD_UPLOAD_KEY }}
           REQUEST_ID: ${{ inputs.request_id }}
+
         run: |
           if [ -z "$BUILD_UPLOAD_KEY" ]; then
             echo "BUILD_UPLOAD_KEY secret is missing!"
             exit 1
           fi
+
           curl --fail-with-body --silent --show-error \
             -X POST \
             -H "Authorization: Bearer $BUILD_UPLOAD_KEY" \
